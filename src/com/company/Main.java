@@ -17,9 +17,13 @@ public class Main {
 
         TTP ttp = fileParser.getTtp();
 
-        System.out.println(ttp.getHeaders());
+        System.out.println(ttp.headersToString());
         System.out.println(ttp.nodesToString());
         System.out.println(ttp.itemsToString());
+
+        GA ga = new GA(ttp);
+        ga.createRandomTSP();
+        System.out.println(ga.tspToString());
 
     }
 }

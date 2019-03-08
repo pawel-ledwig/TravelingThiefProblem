@@ -2,6 +2,9 @@ package com.company;
 
 import java.util.ArrayList;
 
+/*
+Class TTP is used to store all data from parsed file
+ */
 public class TTP {
     private String problemName;
     private String knapsackType;
@@ -24,9 +27,9 @@ public class TTP {
     }
 
 
-    // methods zone
+    // toString methods zone
 
-    String getHeaders(){
+    String headersToString(){
         return  "Problem name: " + problemName + "\n" +
                 "Knapsack type: " + knapsackType + "\n" +
                 "Dimensions: " + dimensionsNumber + "\n" +
@@ -35,6 +38,26 @@ public class TTP {
                 "Min_speed: " + min_speed + "\n" +
                 "Max_speed: " + max_speed + "\n" +
                 "Renting ratio: " + renting_ratio;
+    }
+
+    String nodesToString(){
+        String result = "";
+
+        for (NodeData node : nodesList) {
+            result += node.getIndex() + ": " + node.getX() + ", " + node.getY() + "\n";
+        }
+
+        return result;
+    }
+
+    String itemsToString() {
+        String result = "";
+
+        for (ItemData item : itemsList) {
+            result += item.getIndex() + ": " + item.getProfit() + ", " + item.getWeight() + ", " + item.getNode() +  "\n";
+        }
+
+        return result;
     }
 
 
@@ -126,25 +149,5 @@ public class TTP {
 
     void setItemsList(ArrayList<ItemData> itemsList){
         this.itemsList = itemsList;
-    }
-
-    String nodesToString(){
-        String result = "";
-
-        for (NodeData node : nodesList) {
-            result += node.getIndex() + ": " + node.getX() + ", " + node.getY() + "\n";
-        }
-
-        return result;
-    }
-
-    String itemsToString() {
-        String result = "";
-
-        for (ItemData item : itemsList) {
-            result += item.getIndex() + ": " + item.getProfit() + ", " + item.getWeight() + ", " + item.getNode() +  "\n";
-        }
-
-        return result;
     }
 }
