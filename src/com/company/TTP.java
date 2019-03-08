@@ -20,12 +20,36 @@ public class TTP {
     private ArrayList<NodeData> nodesList;
     private ArrayList<ItemData> itemsList;
 
+    private double distanceMatrix[][];
+
 
     TTP(){
         nodesList = new ArrayList<>();
         itemsList = new ArrayList<>();
     }
 
+    private double getDistanceBetweenPoints(double x1, double y1, double x2, double y2){
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    }
+
+    void setDistanceMatrix() {
+        distanceMatrix = new double[dimensionsNumber][dimensionsNumber];
+
+        /*
+        Fill each element of matrix with distance between points
+        Must remember: index in matrix is less by 1 than real index of node
+        (due to array indexing from 0, nodes indexing from 1)
+         */
+        for (int i = 0; i < dimensionsNumber; i++){
+            for (int j = 0; j < dimensionsNumber; j++){
+                distanceMatrix[i][j] =
+                        getDistanceBetweenPoints(
+                            nodesList.get(i).getX(), nodesList.get(i).getX(),
+                            nodesList.get(j).getX(), nodesList.get(j).getY()
+                        );
+            }
+        }
+    }
 
     // toString methods zone
 
@@ -62,14 +86,6 @@ public class TTP {
 
 
     // getters and setters zone
-
-    void addNode(int index, int x, int y){
-        nodesList.add(new NodeData(index, x, y));
-    }
-
-    void addItem(){
-
-    }
 
     public String getProblemName() {
         return problemName;
@@ -150,4 +166,5 @@ public class TTP {
     void setItemsList(ArrayList<ItemData> itemsList){
         this.itemsList = itemsList;
     }
+
 }
