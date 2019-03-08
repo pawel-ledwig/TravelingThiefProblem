@@ -15,15 +15,26 @@ class FileParser {
         ttp = new TTP();
     }
 
-    void setItemList(){
+    void init(){
+        parseHeader();
+        setNodeMap();
+        setItemList();
+        setDistanceMatrix();
+    }
+
+    private void setDistanceMatrix(){
+        ttp.setDistanceMatrix();
+    }
+
+    private void setItemList(){
         ttp.setItemsList(getItemsFromFile());
     }
 
-    void setNodeMap() {
+    private void setNodeMap() {
         ttp.setNodesList(getNodesFromFile());
     }
 
-    void parseHeader(){
+    private void parseHeader(){
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
 

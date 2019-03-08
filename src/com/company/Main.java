@@ -11,9 +11,7 @@ public class Main {
         File file = new File("files/easy_4.ttp");
 
         FileParser fileParser = new FileParser(file, headerLength);
-        fileParser.parseHeader();
-        fileParser.setNodeMap();
-        fileParser.setItemList();
+        fileParser.init();
 
         TTP ttp = fileParser.getTtp();
 
