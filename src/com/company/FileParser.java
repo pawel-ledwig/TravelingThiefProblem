@@ -1,8 +1,9 @@
 package com.company;
 
 import java.io.*;
+import java.util.ArrayList;
 
-public class FileParser {
+class FileParser {
 
     private File file;
     private TTP ttp;
@@ -15,11 +16,11 @@ public class FileParser {
     }
 
     void setItemList(){
-
+        ttp.setItemsList(getItemsFromFile());
     }
 
     void setNodeMap() {
-        ttp.setNodeMap(getNodesFromFile());
+        ttp.setNodesList(getNodesFromFile());
     }
 
     void parseHeader(){
@@ -40,10 +41,10 @@ public class FileParser {
                         ttp.setKnapsackType(header_field_value);
                         break;
                     case "DIMENSION":
-                        ttp.setDimensions(Integer.parseInt(header_field_value));
+                        ttp.setDimensionsNumber(Integer.parseInt(header_field_value));
                         break;
                     case "NUMBER OF ITEMS":
-                        ttp.setItems(Integer.parseInt(header_field_value));
+                        ttp.setItemsNumber(Integer.parseInt(header_field_value));
                         break;
                     case "CAPACITY OF KNAPSACK":
                         ttp.setCapacity(Integer.parseInt(header_field_value));
@@ -65,8 +66,45 @@ public class FileParser {
         }
     }
 
-    private NodeMap getNodesFromFile(){
-        NodeMap nodeMap = new NodeMap();
+    private ArrayList<ItemData> getItemsFromFile(){
+        ArrayList<ItemData> itemsList = new ArrayList<>();
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+
+            String line = br.readLine();
+
+            while (!line.startsWith("ITEMS")){
+                // skip all lines from beginning to node coordinate section
+                line = br.readLine();
+            }
+            // here caret should be on the first row of node coordinates
+
+            for (int i = 0; i < ttp.getItemsNumber(); i++){
+                line = br.readLine();
+
+                // split row to table (one value per cell, split by tab)
+                String[] nodeTable = line.split("\t");
+
+                /*
+                Add new item
+                nodeTable[0] - index
+                nodeTable[1] - profit
+                nodeTable[2] - weight
+                nodeTable[3] - node reference
+                 */
+                itemsList.add(new ItemData(Integer.parseInt(nodeTable[0]), Integer.parseInt(nodeTable[1]), Integer.parseInt(nodeTable[2]), Integer.parseInt(nodeTable[3])));
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return itemsList;
+    }
+
+    private ArrayList<NodeData> getNodesFromFile(){
+        ArrayList<NodeData> nodesList = new ArrayList<>();
 
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
@@ -79,21 +117,26 @@ public class FileParser {
             }
             // here caret should be on the first row of node coordinates
 
-            for (int i = 0 ; i < ttp.getDimensions(); i++){
+            for (int i = 0; i < ttp.getDimensionsNumber(); i++){
                 line = br.readLine();
 
                 // split row to table (one value per cell, split by tab)
                 String[] nodeTable = line.split("\t");
 
-                // add new point - table index [1] is X, table index [2] is Y
-                nodeMap.addPoint(Double.parseDouble(nodeTable[1]), Double.parseDouble(nodeTable[2]));
+                /*
+                Add new item
+                nodeTable[0] - index
+                nodeTable[1] - X
+                nodeTable[2] - Y
+                 */
+                nodesList.add(new NodeData(Integer.parseInt(nodeTable[0]), Double.parseDouble(nodeTable[1]), Double.parseDouble(nodeTable[2])));
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return nodeMap;
+        return nodesList;
     }
 
     TTP getTtp(){

@@ -1,19 +1,27 @@
 package com.company;
 
+import java.util.ArrayList;
+
 public class TTP {
     private String problemName;
     private String knapsackType;
 
-    private int dimensions;
-    private int items;
+    private int dimensionsNumber;
+    private int itemsNumber;
     private int capacity;
 
     private double min_speed;
     private double max_speed;
     private double renting_ratio;
 
-    private NodeMap nodeMap;
-    private ItemList itemList;
+    private ArrayList<NodeData> nodesList;
+    private ArrayList<ItemData> itemsList;
+
+
+    TTP(){
+        nodesList = new ArrayList<>();
+        itemsList = new ArrayList<>();
+    }
 
 
     // methods zone
@@ -21,8 +29,8 @@ public class TTP {
     String getHeaders(){
         return  "Problem name: " + problemName + "\n" +
                 "Knapsack type: " + knapsackType + "\n" +
-                "Dimensions: " + dimensions  + "\n" +
-                "Items: " + items + "\n" +
+                "Dimensions: " + dimensionsNumber + "\n" +
+                "Items: " + itemsNumber + "\n" +
                 "Capacity: " + capacity + "\n" +
                 "Min_speed: " + min_speed + "\n" +
                 "Max_speed: " + max_speed + "\n" +
@@ -31,6 +39,14 @@ public class TTP {
 
 
     // getters and setters zone
+
+    void addNode(int index, int x, int y){
+        nodesList.add(new NodeData(index, x, y));
+    }
+
+    void addItem(){
+
+    }
 
     public String getProblemName() {
         return problemName;
@@ -48,20 +64,20 @@ public class TTP {
         this.knapsackType = knapsackType;
     }
 
-    int getDimensions() {
-        return dimensions;
+    int getDimensionsNumber() {
+        return dimensionsNumber;
     }
 
-    void setDimensions(int dimensions) {
-        this.dimensions = dimensions;
+    void setDimensionsNumber(int dimensionsNumber) {
+        this.dimensionsNumber = dimensionsNumber;
     }
 
-    int getItems() {
-        return items;
+    int getItemsNumber() {
+        return itemsNumber;
     }
 
-    void setItems(int items) {
-        this.items = items;
+    void setItemsNumber(int itemsNumber) {
+        this.itemsNumber = itemsNumber;
     }
 
     int getCapacity() {
@@ -96,19 +112,39 @@ public class TTP {
         this.renting_ratio = renting_ratio;
     }
 
-    NodeMap getNodeMap() {
-        return nodeMap;
+    public ArrayList<NodeData> getNodesList() {
+        return nodesList;
     }
 
-    void setNodeMap(NodeMap nodeMap) {
-        this.nodeMap = nodeMap;
+    public ArrayList<ItemData> getItemsList() {
+        return itemsList;
     }
 
-    ItemList getItemList() {
-        return itemList;
+    void setNodesList(ArrayList<NodeData> nodesList){
+        this.nodesList = nodesList;
     }
 
-    void setItemList(ItemList itemList) {
-        this.itemList = itemList;
+    void setItemsList(ArrayList<ItemData> itemsList){
+        this.itemsList = itemsList;
+    }
+
+    String nodesToString(){
+        String result = "";
+
+        for (NodeData node : nodesList) {
+            result += node.getIndex() + ": " + node.getX() + ", " + node.getY() + "\n";
+        }
+
+        return result;
+    }
+
+    String itemsToString() {
+        String result = "";
+
+        for (ItemData item : itemsList) {
+            result += item.getIndex() + ": " + item.getProfit() + ", " + item.getWeight() + ", " + item.getNode() +  "\n";
+        }
+
+        return result;
     }
 }
