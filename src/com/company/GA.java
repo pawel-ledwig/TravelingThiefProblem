@@ -7,6 +7,7 @@ import java.util.Collections;
 Class GA is used to implement all needed genetic algorithms and solve a TTP problem
  */
 class GA {
+
     // reference to created TTP object, which is storing all data from parsed file
     private TTP ttp;
 
@@ -20,6 +21,24 @@ class GA {
         this.ttp = ttp;
 
         tsp = new ArrayList<>();
+    }
+
+    private double getDistanceBetweenNodes(int indexA, int indexB){
+        /*
+        Decrementing of index is needed due to way of indexing array and nodes:
+        Arrays are indexed from 0 and nodes are indexed from 1
+         */
+        return ttp.getDistanceValue(indexA - 1, indexB - 1);
+    }
+
+    double calculateTravelTime(double velocity){
+        double travelTime = 0.0;
+
+        for (int i = 1 ; i < tsp.size(); i++){
+            travelTime += getDistanceBetweenNodes(tsp.get(i - 1), tsp.get(i)) / velocity;
+        }
+
+        return travelTime;
     }
 
     // fill tsp array with randomly placed indexes of nodes

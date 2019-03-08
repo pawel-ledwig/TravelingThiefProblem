@@ -22,6 +22,7 @@ public class Main {
         GA ga = new GA(ttp);
         ga.createRandomTSP();
         System.out.println(ga.tspToString());
+        System.out.println(ga.calculateTravelTime(0.5));
 
     }
 }

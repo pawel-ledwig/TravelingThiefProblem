@@ -28,6 +28,14 @@ public class TTP {
         itemsList = new ArrayList<>();
     }
 
+
+    double getDistanceValue(int indexA, int indexB){
+        return distanceMatrix[indexA][indexB];
+    }
+
+    /*
+    Calculates Euclidean distance between dwo points in 2D space
+     */
     private double getDistanceBetweenPoints(double x1, double y1, double x2, double y2){
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
