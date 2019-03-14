@@ -23,7 +23,7 @@ public class TTP {
 
     private double[][] distanceMatrix;
 
-    private ArrayList<Integer> tsp;
+    private ArrayList<Integer> tspOrderList;
     private ArrayList<Double> velocityList;
 
     private enum KNP_TYPE {
@@ -41,13 +41,26 @@ public class TTP {
         nodesList = new ArrayList<>();
         itemsList = new ArrayList<>();
 
-        tsp = new ArrayList<>();
+        tspOrderList = new ArrayList<>();
         velocityList = new ArrayList<>();
     }
 
     /*
     --------------------------------------------------------------------------------------------------
     */
+
+    Specimen createRandomSpecimen(){
+        createRandomTSP();
+        return new Specimen(evaluate(), new ArrayList<>(tspOrderList));
+    }
+
+    Specimen createSpecimenFromCurrent(){
+        return new Specimen(evaluate(), tspOrderList);
+    }
+
+    double evaluate(){
+        return calculateKNP() - calculateTravelTime();
+    }
 
     /*
     Choose the best item from given in a list.
@@ -112,8 +125,8 @@ public class TTP {
         int totalValue = 0;
         int currentWeight = 0;
 
-        // for each node in tsp arrayList calculate best option
-        for (int currentNodeID : tsp){
+        // for each node in tspOrderList arrayList calculate best option
+        for (int currentNodeID : tspOrderList){
 
             // arrayList for all items in node
             ArrayList<ItemData> itemsInNode = new ArrayList<>();
@@ -151,13 +164,13 @@ public class TTP {
     double calculateTravelTime(){
         double travelTime = 0.0;
 
-        // for each node in tsp arrayList calculate everything
-        for (int i = 1 ; i < tsp.size(); i++){
-            travelTime += getDistanceBetweenNodes(tsp.get(i - 1), tsp.get(i)) / velocityList.get(i - 1);
+        // for each node in tspOrderList arrayList calculate everything
+        for (int i = 1; i < tspOrderList.size(); i++){
+            travelTime += getDistanceBetweenNodes(tspOrderList.get(i - 1), tspOrderList.get(i)) / velocityList.get(i - 1);
         }
 
         // travel time between last and first node
-        travelTime += getDistanceBetweenNodes(tsp.get(0), tsp.get(tsp.size() - 1)) / velocityList.get(velocityList.size() - 1);
+        travelTime += getDistanceBetweenNodes(tspOrderList.get(0), tspOrderList.get(tspOrderList.size() - 1)) / velocityList.get(velocityList.size() - 1);
 
         return travelTime;
     }
@@ -178,18 +191,18 @@ public class TTP {
     */
 
     /*
-    Fill tsp array with randomly placed indexes of nodes
+    Fill tspOrderList array with randomly placed indexes of nodes
      */
     void createRandomTSP(){
-        tsp.clear();
+        tspOrderList.clear();
 
         // fill an ArrayList with indexes of available nodes (1..N)
         for (int i = 1 ; i <= getDimensionsNumber(); i++){
-            tsp.add(i);
+            tspOrderList.add(i);
         }
 
         // swap indexes randomly
-        Collections.shuffle(tsp);
+        Collections.shuffle(tspOrderList);
     }
 
     /*
@@ -260,7 +273,7 @@ public class TTP {
     String tspToString(){
         StringBuilder result = new StringBuilder();
 
-        for (int index : tsp){
+        for (int index : tspOrderList){
             result.append(index).append(" ");
         }
 
