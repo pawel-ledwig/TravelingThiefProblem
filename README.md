@@ -1,4 +1,4 @@
-<h1>Train Timetabling Problem</h1>
+<h1>Traveling Thief Problem</h1>
 
 <h3>Implemented using Genetic Algorithm</h3>
 
