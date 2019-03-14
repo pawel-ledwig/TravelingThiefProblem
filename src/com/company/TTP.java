@@ -49,6 +49,9 @@ public class TTP {
     --------------------------------------------------------------------------------------------------
     */
 
+    /*
+    Choose the best item from given in a list.
+     */
     private ItemData getBestItem(ArrayList<ItemData> itemsInNode) {
         int currentBestIndex = 0;
 
@@ -86,14 +89,25 @@ public class TTP {
         return new ItemData(0, 0, 0, 0);
     }
 
+    /*
+    Calculate current velocity based on current knapsack weight and min-max velocity bounds.
+     */
     private double calculateCurrentVelocity(int currentWeight){
         return getMaxSpeed() - currentWeight * ((getMaxSpeed() - getMinSpeed()) / getCapacity());
     }
 
+    /*
+    Check if can I grab a selected item (if knapsack capacity is big enough)
+     */
     private boolean canGrabItem(int currentWeight, ItemData bestItem) {
         return currentWeight + bestItem.getWeight() <= getCapacity();
     }
 
+    /*
+    Calculate value of knapsack after trip.
+    Method is also calculating velocity list during the trip, which is needed to calculate trip time.
+    Method must be called at least once before calling calculateTravelTime().
+     */
     int calculateKNP(){
         int totalValue = 0;
         int currentWeight = 0;
@@ -131,7 +145,10 @@ public class TTP {
         return totalValue;
     }
 
-    double calculateTrip(){
+    /*
+    Calculate travel time (full loop)
+     */
+    double calculateTravelTime(){
         double travelTime = 0.0;
 
         // for each node in tsp arrayList calculate everything
