@@ -90,6 +90,10 @@ public class TTP {
         return getMaxSpeed() - currentWeight * ((getMaxSpeed() - getMinSpeed()) / getCapacity());
     }
 
+    private boolean canGrabItem(int currentWeight, ItemData bestItem) {
+        return currentWeight + bestItem.getWeight() <= getCapacity();
+    }
+
     int calculateKNP(){
         int totalValue = 0;
         int currentWeight = 0;
@@ -110,13 +114,15 @@ public class TTP {
             }
 
             /*
-            If items exists in this node, take the best and update knapsack value and weight
+            If items exists in this node, take the best one
              */
             if (itemsInNode.size() > 0){
                 ItemData bestItem = getBestItem(itemsInNode);
 
-                totalValue += bestItem.getProfit();
-                currentWeight += bestItem.getWeight();
+                if (canGrabItem(currentWeight, bestItem)) {
+                    totalValue += bestItem.getProfit();
+                    currentWeight += bestItem.getWeight();
+                }
             }
 
             velocityList.add(calculateCurrentVelocity(currentWeight));
@@ -135,22 +141,6 @@ public class TTP {
 
         // travel time between last and first node
         travelTime += getDistanceBetweenNodes(tsp.get(0), tsp.get(tsp.size() - 1)) / velocityList.get(velocityList.size() - 1);
-
-        return travelTime;
-    }
-
-    /*
-    Calculates travel time from first to last node (and last->first)
-     */
-    double calculateTravelTime(double velocity){
-        double travelTime = 0.0;
-
-        for (int i = 1 ; i < tsp.size(); i++){
-            travelTime += getDistanceBetweenNodes(tsp.get(i - 1), tsp.get(i)) / velocity;
-        }
-
-        // travel time between last and first node
-        travelTime += getDistanceBetweenNodes(tsp.get(0), tsp.get(tsp.size() - 1));
 
         return travelTime;
     }
