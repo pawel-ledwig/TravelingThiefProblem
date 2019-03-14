@@ -14,15 +14,27 @@ public class Main {
         fileParser.init();
 
         TTP ttp = fileParser.getTtp();
+        ttp.setKnpTypeBestRatio();
 
         System.out.println(ttp.headersToString());
         System.out.println(ttp.nodesToString());
         System.out.println(ttp.itemsToString());
 
-        GA ga = new GA(ttp);
-        ga.createRandomTSP();
-        System.out.println(ga.tspToString());
-        System.out.println(ga.calculateTravelTime(0.5));
+        ttp.createRandomTSP();
+        System.out.println(ttp.tspToString());
+        System.out.println(ttp.calculateKNP());
+        System.out.println(ttp.velocityToString());
+        System.out.println(ttp.calculateTravelTime());
+        System.out.println(ttp.evaluate());
 
+        GA ga = new GA(10, ttp);
+        ga.createPopulation();
+        System.out.println(ga.populationToString());
+        System.out.println(ga.getBestRating());
+        System.out.println(ga.getWorstRating());
+        ga.makeCompetition();
+        ga.swapGenerations();
+        System.out.println(ga.getBestRating());
+        System.out.println(ga.getWorstRating());
     }
 }

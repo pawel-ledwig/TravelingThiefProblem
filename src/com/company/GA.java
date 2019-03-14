@@ -8,7 +8,8 @@ Class GA is used to implement all needed genetic algorithms and solve a TTP prob
 class GA {
     private int populationSize;
     private int generationsNumber;
-    private ArrayList<Specimen> specimensList;
+    private ArrayList<Specimen> specimensGenerationCurrent;
+    private ArrayList<Specimen> specimensGenerationNext;
 
     private TTP ttp;
 
@@ -16,13 +17,14 @@ class GA {
         this.populationSize = populationSize;
         this.ttp = ttp;
 
-        specimensList = new ArrayList<>();
+        specimensGenerationCurrent = new ArrayList<>();
+        specimensGenerationNext = new ArrayList<>();
     }
 
     double getBestRating(){
-        double bestRating = specimensList.get(0).getRating();
+        double bestRating = specimensGenerationCurrent.get(0).getRating();
 
-        for (Specimen specimen : specimensList){
+        for (Specimen specimen : specimensGenerationCurrent){
             if (specimen.getRating() > bestRating){
                 bestRating = specimen.getRating();
             }
@@ -32,9 +34,9 @@ class GA {
     }
 
     double getWorstRating(){
-        double worstRating = specimensList.get(0).getRating();
+        double worstRating = specimensGenerationCurrent.get(0).getRating();
 
-        for (Specimen specimen : specimensList){
+        for (Specimen specimen : specimensGenerationCurrent){
             if (specimen.getRating() < worstRating){
                 worstRating = specimen.getRating();
             }
@@ -43,19 +45,34 @@ class GA {
         return worstRating;
     }
 
+    void makeCompetition(){
+        for (int i = 0 ; i < populationSize / 2; i++){
+            if (specimensGenerationCurrent.get(i * 2).getRating() > specimensGenerationCurrent.get(i * 2 + 1).getRating()) {
+                specimensGenerationNext.add(specimensGenerationCurrent.get(i * 2));
+            } else {
+                specimensGenerationNext.add(specimensGenerationCurrent.get(i * 2 + 1));
+            }
+        }
+    }
+
+    void swapGenerations(){
+        specimensGenerationCurrent = new ArrayList<>(specimensGenerationNext);
+        specimensGenerationNext.clear();
+    }
+
     /*
     Create random population
      */
     void createPopulation(){
         for (int i = 0; i < populationSize; i++){
-            specimensList.add(ttp.createRandomSpecimen());
+            specimensGenerationCurrent.add(ttp.createRandomSpecimen());
         }
     }
 
     String populationToString(){
         StringBuilder result = new StringBuilder();
 
-        for(Specimen specimen : specimensList){
+        for(Specimen specimen : specimensGenerationCurrent){
             result.append(specimen);
         }
 
