@@ -221,23 +221,23 @@ public class TTP {
     }
 
     String nodesToString(){
-        String result = "";
+        StringBuilder result = new StringBuilder();
 
         for (NodeData node : nodesList) {
-            result += node.getIndex() + ": " + node.getX() + ", " + node.getY() + "\n";
+            result.append(node.getIndex()).append(": ").append(node.getX()).append(", ").append(node.getY()).append("\n");
         }
 
-        return result;
+        return result.toString();
     }
 
     String itemsToString() {
-        String result = "";
+        StringBuilder result = new StringBuilder();
 
         for (ItemData item : itemsList) {
-            result += item.getIndex() + ": " + item.getProfit() + ", " + item.getWeight() + ", " + item.getNode() +  "\n";
+            result.append(item.getIndex()).append(": ").append(item.getProfit()).append(", ").append(item.getWeight()).append(", ").append(item.getNode()).append("\n");
         }
 
-        return result;
+        return result.toString();
     }
 
     String tspToString(){
