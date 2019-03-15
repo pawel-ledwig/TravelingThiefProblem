@@ -16,28 +16,32 @@ public class Main {
         TTP ttp = fileParser.getTtp();
         ttp.setKnpTypeBestRatio();
 
-        System.out.println(ttp.headersToString());
-        System.out.println(ttp.nodesToString());
-        System.out.println(ttp.itemsToString());
+        //System.out.println(ttp.headersToString());
+        //System.out.println(ttp.nodesToString());
+        //System.out.println(ttp.itemsToString());
 
         ttp.createRandomTSP();
-        System.out.println(ttp.tspToString());
-        System.out.println(ttp.calculateKNP());
-        System.out.println(ttp.velocityToString());
-        System.out.println(ttp.calculateTravelTime());
-        System.out.println(ttp.evaluate());
+        //System.out.println(ttp.tspToString());
+        //System.out.println(ttp.calculateKNP());
+        //System.out.println(ttp.velocityToString());
+        //System.out.println(ttp.calculateTravelTime());
+        //System.out.println(ttp.evaluate());
 
-        GA ga = new GA(5, ttp);
+        GA ga = new GA(100, 100, ttp);
+        ga.setCrossoverProbability(0.7);
+        ga.setMutationProbability(0.3);
+
         ga.createPopulation();
         System.out.println(ga.populationToString());
-        //System.out.println(ga.getBestRating());
-        //System.out.println(ga.getWorstRating());
-        ga.makeCompetition();
-        ga.swapGenerations();
-        System.out.println(ga.populationToString());
-        ga.fillPopulation();
-        System.out.println(ga.populationToString());
-        //System.out.println(ga.getBestRating());
+        System.out.println("Best: " + ga.getBestRating());
+        System.out.println("Avg: " + ga.getAvgRating());
+        System.out.println("Worst: " + ga.getWorstRating());
+        ga.makeGenerations();
+        System.out.println("Best: " + ga.getBestRating());
+        System.out.println("Avg: " + ga.getAvgRating());
+        System.out.println("Worst: " + ga.getWorstRating());
+        ga.resultsToFile();
+        //System.out.println(ga.populationToString());
         //System.out.println(ga.getWorstRating());
     }
 }

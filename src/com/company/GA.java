@@ -1,7 +1,10 @@
 package com.company;
 
-import java.lang.reflect.Array;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 /*
 Class GA is used to implement all needed genetic algorithms and solve a TTP problem
@@ -9,24 +12,88 @@ Class GA is used to implement all needed genetic algorithms and solve a TTP prob
 class GA {
     private int populationSize;
     private int generationsNumber;
+
+    private double crossoverProbability;
+    private double mutationProbability;
+
     private ArrayList<Specimen> specimensGenerationCurrent;
     private ArrayList<Specimen> specimensGenerationNext;
 
+    private ArrayList<Double> bestRatings;
+    private ArrayList<Double> avgRatings;
+    private ArrayList<Double> worstRatings;
+
     private TTP ttp;
 
-    GA (int populationSize, TTP ttp){
-        this.populationSize = populationSize;
+    GA (int populationSize, int generationsNumber, TTP ttp){
+        this.populationSize     = populationSize;
+        this.generationsNumber  = generationsNumber;
+
         this.ttp = ttp;
 
-        specimensGenerationCurrent = new ArrayList<>();
-        specimensGenerationNext = new ArrayList<>();
+        specimensGenerationCurrent  = new ArrayList<>();
+        specimensGenerationNext     = new ArrayList<>();
+
+        bestRatings  = new ArrayList<>();
+        avgRatings   = new ArrayList<>();
+        worstRatings = new ArrayList<>();
+    }
+
+    void makeGenerations(){
+        for (int i = 0; i < generationsNumber; i++){
+            makeCompetition();
+            swapGenerations();
+            fillPopulation();
+            mutatePopulation();
+
+            bestRatings.add(getBestRating());
+            avgRatings.add(getAvgRating());
+            worstRatings.add(getWorstRating());
+        }
+    }
+
+    private void mutation(Specimen specimen){
+        Random r = new Random();
+
+        int nodeA = r.nextInt(ttp.getDimensionsNumber());
+        int nodeB = r.nextInt(ttp.getDimensionsNumber());
+
+        int tmp = specimen.getTspOrderList().get(nodeA);
+        specimen.getTspOrderList().set(nodeA, specimen.getTspOrderList().get(nodeB));
+        specimen.getTspOrderList().set(nodeB, tmp);
+    }
+
+    private void mutatePopulation(){
+        for (Specimen specimen : specimensGenerationCurrent){
+            Random r = new Random();
+
+            if (r.nextDouble() < mutationProbability){
+                mutation(specimen);
+            }
+        }
     }
 
     /*
     Method used to fill population with children up to max population size.
      */
-    void fillPopulation(){
-        specimensGenerationCurrent.add(createChildPMX(specimensGenerationCurrent.get(0), specimensGenerationCurrent.get(1), 2, 5));
+    private void fillPopulation(){
+        int parents = specimensGenerationCurrent.size();
+
+        while (specimensGenerationCurrent.size() < populationSize){
+            Random r = new Random();
+
+            if (r.nextDouble() < crossoverProbability){
+                int parentA = r.nextInt(parents);
+                int parentB = r.nextInt(parents);
+
+                int startPoint = Math.max(r.nextInt(ttp.getDimensionsNumber()) - 1, 0);
+                int endPoint = Math.min(startPoint + r.nextInt(ttp.getDimensionsNumber() / 10), ttp.getDimensionsNumber() - 1);
+
+                specimensGenerationCurrent.add(
+                        createChildPMX(specimensGenerationCurrent.get(parentA), specimensGenerationCurrent.get(parentB), startPoint, endPoint)
+                );
+            }
+        }
     }
 
     /*
@@ -90,6 +157,16 @@ class GA {
         return bestRating;
     }
 
+    double getAvgRating(){
+        double sumRating = 0.0;
+
+        for (Specimen specimen : specimensGenerationCurrent){
+            sumRating += specimen.getRating();
+        }
+
+        return sumRating / specimensGenerationCurrent.size();
+    }
+
     double getWorstRating(){
         double worstRating = specimensGenerationCurrent.get(0).getRating();
 
@@ -102,7 +179,7 @@ class GA {
         return worstRating;
     }
 
-    void makeCompetition(){
+    private void makeCompetition(){
         for (int i = 0 ; i < populationSize / 2; i++){
             if (specimensGenerationCurrent.get(i * 2).getRating() > specimensGenerationCurrent.get(i * 2 + 1).getRating()) {
                 specimensGenerationNext.add(specimensGenerationCurrent.get(i * 2));
@@ -112,7 +189,7 @@ class GA {
         }
     }
 
-    void swapGenerations(){
+    private void swapGenerations(){
         specimensGenerationCurrent = new ArrayList<>(specimensGenerationNext);
         specimensGenerationNext.clear();
     }
@@ -136,6 +213,21 @@ class GA {
         return result.toString();
     }
 
+    void resultsToFile(){
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter("D:/GeneticAlgorithm.csv"));
+            bw.write("ID;Best;Avg;Worst");
+            bw.newLine();
+            for (int i = 0 ; i < bestRatings.size(); i++){
+                bw.write(i + ";" + Math.round(bestRatings.get(i)) + ";" + Math.round(avgRatings.get(i)) + ";" + Math.round(worstRatings.get(i)) + ";");
+                bw.newLine();
+            }
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /*
     --------------------------------------------------------------------------------------------------
     */
@@ -146,5 +238,13 @@ class GA {
 
     public void setGenerationsNumber(int generationsNumber) {
         this.generationsNumber = generationsNumber;
+    }
+
+    public void setCrossoverProbability(double crossoverProbability) {
+        this.crossoverProbability = crossoverProbability;
+    }
+
+    public void setMutationProbability(double mutationProbability) {
+        this.mutationProbability = mutationProbability;
     }
 }
