@@ -27,14 +27,17 @@ public class Main {
         System.out.println(ttp.calculateTravelTime());
         System.out.println(ttp.evaluate());
 
-        GA ga = new GA(10, ttp);
+        GA ga = new GA(5, ttp);
         ga.createPopulation();
         System.out.println(ga.populationToString());
-        System.out.println(ga.getBestRating());
-        System.out.println(ga.getWorstRating());
+        //System.out.println(ga.getBestRating());
+        //System.out.println(ga.getWorstRating());
         ga.makeCompetition();
         ga.swapGenerations();
-        System.out.println(ga.getBestRating());
-        System.out.println(ga.getWorstRating());
+        System.out.println(ga.populationToString());
+        ga.fillPopulation();
+        System.out.println(ga.populationToString());
+        //System.out.println(ga.getBestRating());
+        //System.out.println(ga.getWorstRating());
     }
 }

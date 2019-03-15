@@ -49,15 +49,25 @@ public class TTP {
     --------------------------------------------------------------------------------------------------
     */
 
+    /*
+    Method used to create new Specimen from random data (random TSP order, evaluated).
+     */
+
     Specimen createRandomSpecimen(){
         createRandomTSP();
         return new Specimen(evaluate(), new ArrayList<>(tspOrderList));
     }
 
+    /*
+    Method used to return new Specimen from current TTP data.
+     */
     Specimen createSpecimenFromCurrent(){
         return new Specimen(evaluate(), tspOrderList);
     }
 
+    /*
+    Method used to evaluate specimen.
+     */
     double evaluate(){
         return calculateKNP() - calculateTravelTime();
     }
@@ -384,5 +394,9 @@ public class TTP {
 
     void setKnpTypeBestRatio(){
         knpType = KNP_TYPE.BEST_RATIO;
+    }
+
+    void setTspOrderList(ArrayList<Integer> tspOrderList) {
+        this.tspOrderList = tspOrderList;
     }
 }

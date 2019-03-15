@@ -1,5 +1,6 @@
 package com.company;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /*
@@ -19,6 +20,62 @@ class GA {
 
         specimensGenerationCurrent = new ArrayList<>();
         specimensGenerationNext = new ArrayList<>();
+    }
+
+    /*
+    Method used to fill population with children up to max population size.
+     */
+    void fillPopulation(){
+        specimensGenerationCurrent.add(createChildPMX(specimensGenerationCurrent.get(0), specimensGenerationCurrent.get(1), 2, 5));
+    }
+
+    /*
+    Creating a child from two parents using PMX method
+     */
+    private Specimen createChildPMX(Specimen parentA, Specimen parentB, int startPoint, int endPoint){
+        ArrayList<Integer> subArrayA = new ArrayList<>();
+        ArrayList<Integer> subArrayB = new ArrayList<>();
+
+        /*
+        Child array at the beginning is made from parentA array
+         */
+        ArrayList<Integer> childArray = new ArrayList<>(parentA.getTspOrderList());
+
+        /*
+        Get elements which will be used to crossover
+         */
+        for (int i = startPoint; i < endPoint; i++){
+            subArrayA.add(parentA.getTspOrderList().get(i));
+            subArrayB.add(parentB.getTspOrderList().get(i));
+        }
+
+        /*
+        Replace all nodes from subArrayB with nodes from subArrayA in childArray
+         */
+        for (int i = 0; i < subArrayB.size(); i++){
+            for (int j = 0; j < childArray.size(); j++){
+                if (subArrayB.get(i).equals(childArray.get(j))){
+                    childArray.set(j, subArrayA.get(i));
+                }
+            }
+        }
+
+        /*
+        Replace block of nodes from startPoint to endPoint with nodes from subArrayB
+         */
+        for (int i = startPoint; i < endPoint; i++){
+            childArray.set(i, subArrayB.get(i - startPoint));
+        }
+
+        /*
+        Update TTP object with new TSP, needed to evaluate it
+         */
+        ttp.setTspOrderList(new ArrayList<>(childArray));
+
+        /*
+        Evaluate new Specimen and return
+         */
+        return ttp.createSpecimenFromCurrent();
     }
 
     double getBestRating(){
