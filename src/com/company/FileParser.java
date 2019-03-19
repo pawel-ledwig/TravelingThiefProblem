@@ -67,7 +67,7 @@ class FileParser {
                         ttp.setMaxSpeed(Double.parseDouble(header_field_value));
                         break;
                     case "RENTING RATIO":
-                        ttp.setRenting_ratio(Double.parseDouble(header_field_value));
+                        ttp.setRentingRatio(Double.parseDouble(header_field_value));
                         break;
                 }
             }

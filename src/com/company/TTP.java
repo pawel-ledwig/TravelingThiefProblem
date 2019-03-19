@@ -14,9 +14,9 @@ public class TTP {
     private int itemsNumber;
     private int capacity;
 
-    private double min_speed;
-    private double max_speed;
-    private double renting_ratio;
+    private double minSpeed;
+    private double maxSpeed;
+    private double rentingRatio;
 
     private ArrayList<NodeData> nodesList;
     private ArrayList<ItemData> itemsList;
@@ -68,7 +68,7 @@ public class TTP {
     /*
     Method used to evaluate specimen.
      */
-    double evaluate(){
+    private double evaluate(){
         return calculateKNP() - calculateTravelTime();
     }
 
@@ -131,7 +131,7 @@ public class TTP {
     Method is also calculating velocity list during the trip, which is needed to calculate trip time.
     Method must be called at least once before calling calculateTravelTime().
      */
-    int calculateKNP(){
+    private int calculateKNP(){
         int totalValue = 0;
         int currentWeight = 0;
 
@@ -255,9 +255,9 @@ public class TTP {
                 "Dimensions: " + dimensionsNumber + "\n" +
                 "Items: " + itemsNumber + "\n" +
                 "Capacity: " + capacity + "\n" +
-                "Min_speed: " + min_speed + "\n" +
-                "Max_speed: " + max_speed + "\n" +
-                "Renting ratio: " + renting_ratio;
+                "Min_speed: " + minSpeed + "\n" +
+                "Max_speed: " + maxSpeed + "\n" +
+                "Renting ratio: " + rentingRatio;
     }
 
     String nodesToString(){
@@ -345,27 +345,27 @@ public class TTP {
     }
 
     double getMinSpeed() {
-        return min_speed;
+        return minSpeed;
     }
 
     void setMinSpeed(double min_speed) {
-        this.min_speed = min_speed;
+        this.minSpeed = min_speed;
     }
 
     double getMaxSpeed() {
-        return max_speed;
+        return maxSpeed;
     }
 
     void setMaxSpeed(double max_speed) {
-        this.max_speed = max_speed;
+        this.maxSpeed = max_speed;
     }
 
-    double getRenting_ratio() {
-        return renting_ratio;
+    double getRentingRatio() {
+        return rentingRatio;
     }
 
-    void setRenting_ratio(double renting_ratio) {
-        this.renting_ratio = renting_ratio;
+    void setRentingRatio(double rentingRatio) {
+        this.rentingRatio = rentingRatio;
     }
 
     public ArrayList<NodeData> getNodesList() {
