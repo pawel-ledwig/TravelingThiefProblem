@@ -11,6 +11,11 @@ public class Specimen {
         this.tspOrderList = tspOrderList;
     }
 
+    Specimen(Specimen bestSpecimen) {
+        this.rating = bestSpecimen.getRating();
+        this.tspOrderList = new ArrayList<>(bestSpecimen.getTspOrderList());
+    }
+
     public double getRating() {
         return rating;
     }
