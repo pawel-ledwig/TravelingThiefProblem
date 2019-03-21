@@ -171,7 +171,7 @@ public class TTP {
     /*
     Calculate travel time (full loop)
      */
-    double calculateTravelTime(){
+    private double calculateTravelTime(){
         double travelTime = 0.0;
 
         // for each node in tspOrderList arrayList calculate everything
