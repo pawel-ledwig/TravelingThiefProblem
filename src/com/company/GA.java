@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
-/*
-Class GA is used to implement all needed genetic algorithms and solve a TTP problem
+/**
+ * Class GA is used to implement all needed genetic algorithms and solve a TTP problem
  */
 class GA {
     private int populationSize;
@@ -39,6 +39,9 @@ class GA {
         worstRatings = new ArrayList<>();
     }
 
+    /**
+     * Method used to create new generation of specimens
+     */
     void makeGenerations(){
         for (int i = 0; i < generationsNumber; i++){
             makeCompetition();
@@ -52,6 +55,9 @@ class GA {
         }
     }
 
+    /**
+     * Method used to mutate a specimen
+     */
     private void mutation(Specimen specimen){
         Random r = new Random();
 
@@ -63,6 +69,9 @@ class GA {
         specimen.getTspOrderList().set(nodeB, tmp);
     }
 
+    /**
+     * Method used to mutate all population, dependent on mutation probability factor.
+     */
     private void mutatePopulation(){
         for (Specimen specimen : specimensGenerationCurrent){
             Random r = new Random();
@@ -73,8 +82,8 @@ class GA {
         }
     }
 
-    /*
-    Method used to fill population with children up to max population size.
+    /**
+     * Method used to fill population with children up to max population size.
      */
     private void fillPopulation(){
         int parents = specimensGenerationCurrent.size();
@@ -96,8 +105,8 @@ class GA {
         }
     }
 
-    /*
-    Creating a child from two parents using PMX method
+    /**
+     * Creating a child from two parents using PMX method
      */
     private Specimen createChildPMX(Specimen parentA, Specimen parentB, int startPoint, int endPoint){
         ArrayList<Integer> subArrayA = new ArrayList<>();
@@ -140,11 +149,14 @@ class GA {
         ttp.setTspOrderList(new ArrayList<>(childArray));
 
         /*
-        Evaluate new Specimen and return
+         * Evaluate new Specimen and return
          */
         return ttp.createSpecimenFromCurrent();
     }
 
+    /**
+     * Method returns best rating from all specimens in generation
+     */
     double getBestRating(){
         double bestRating = specimensGenerationCurrent.get(0).getRating();
 
@@ -157,6 +169,9 @@ class GA {
         return bestRating;
     }
 
+    /**
+     * Method returns average rating from all specimens in generation
+     */
     double getAvgRating(){
         double sumRating = 0.0;
 
@@ -167,6 +182,9 @@ class GA {
         return sumRating / specimensGenerationCurrent.size();
     }
 
+    /**
+     * Method returns worst rating from all specimens in generation
+     */
     double getWorstRating(){
         double worstRating = specimensGenerationCurrent.get(0).getRating();
 
@@ -179,6 +197,9 @@ class GA {
         return worstRating;
     }
 
+    /**
+     * Method used to create population of the parents (next generation)
+     */
     private void makeCompetition(){
         for (int i = 0 ; i < populationSize / 2; i++){
             if (specimensGenerationCurrent.get(i * 2).getRating() > specimensGenerationCurrent.get(i * 2 + 1).getRating()) {
@@ -189,12 +210,15 @@ class GA {
         }
     }
 
+    /**
+     * Method used to move next generation into current
+     */
     private void swapGenerations(){
         specimensGenerationCurrent = new ArrayList<>(specimensGenerationNext);
         specimensGenerationNext.clear();
     }
 
-    /*
+    /**
     Create random population
      */
     void createPopulation(){
