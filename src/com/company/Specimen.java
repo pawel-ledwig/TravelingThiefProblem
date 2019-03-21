@@ -16,19 +16,19 @@ public class Specimen {
         this.tspOrderList = new ArrayList<>(bestSpecimen.getTspOrderList());
     }
 
-    public double getRating() {
+    double getRating() {
         return rating;
     }
 
-    public void setRating(double rating) {
+    void setRating(double rating) {
         this.rating = rating;
     }
 
-    public ArrayList<Integer> getTspOrderList() {
+    ArrayList<Integer> getTspOrderList() {
         return tspOrderList;
     }
 
-    public void setTspOrderList(ArrayList<Integer> tspOrderList) {
+    void setTspOrderList(ArrayList<Integer> tspOrderList) {
         this.tspOrderList = tspOrderList;
     }
 
