@@ -8,7 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        File file = new File("files/easy_4.ttp");
+        File file = new File("files/medium_4.ttp");
 
         FileParser fileParser = new FileParser(file, headerLength);
         fileParser.init();
@@ -27,20 +27,22 @@ public class Main {
         //System.out.println(ttp.calculateTravelTime());
         //System.out.println(ttp.evaluate());
 
-        GA ga = new GA(100, 100, ttp);
+        GA ga = new GA(1000, 100, ttp);
         ga.setCrossoverProbability(0.7);
         ga.setMutationProbability(0.3);
+        ga.setTournamentSize(5);
 
         ga.createPopulation();
-        System.out.println(ga.populationToString());
+        //System.out.println(ga.populationToString());
         System.out.println("Best: " + ga.getBestRating());
         System.out.println("Avg: " + ga.getAvgRating());
         System.out.println("Worst: " + ga.getWorstRating());
-        ga.makeGenerations();
+        ga.makeGenerationsByClassicTournament();
+        System.out.println();
         System.out.println("Best: " + ga.getBestRating());
         System.out.println("Avg: " + ga.getAvgRating());
         System.out.println("Worst: " + ga.getWorstRating());
-        ga.resultsToFile();
+        //ga.resultsToFile();
         //System.out.println(ga.populationToString());
         //System.out.println(ga.getWorstRating());
     }
