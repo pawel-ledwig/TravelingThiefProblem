@@ -42,4 +42,12 @@ public class Specimen {
 
         return result.toString();
     }
+
+    @Override
+    public boolean equals(Object o){
+        if (getClass() != o.getClass())
+            return false;
+
+        return tspOrderList.equals(((Specimen) o).tspOrderList);
+    }
 }
