@@ -12,6 +12,7 @@ import java.util.Random;
 class GA {
     private int populationSize;
     private int generationsNumber;
+    private int tournamentSize;
 
     private double crossoverProbability;
     private double mutationProbability;
@@ -40,13 +41,28 @@ class GA {
     }
 
     /**
-     * Method used to create new generation of specimens
+     * Method used to create new generation of specimens by classic tournament.
      */
-    void makeGenerations(){
+    void makeGenerationsByClassicTournament(){
         for (int i = 0; i < generationsNumber; i++){
-            makeCompetition();
+            fillPopulationByClassicTournament();
             swapGenerations();
-            fillPopulation();
+            mutatePopulation();
+
+            bestRatings.add(getBestRating());
+            avgRatings.add(getAvgRating());
+            worstRatings.add(getWorstRating());
+        }
+    }
+
+    /**
+     * Method used to create new generation of specimens by parents population.
+     */
+    void makeGenerationsByParentsPopulation(){
+        for (int i = 0; i < generationsNumber; i++){
+            createPopulationOfParents();
+            swapGenerations();
+            fillPopulationByParentsPopulation();
             mutatePopulation();
 
             bestRatings.add(getBestRating());
@@ -83,9 +99,30 @@ class GA {
     }
 
     /**
-     * Method used to fill population with children up to max population size.
+     * Method used to fill population with children up to max population size (new tournament at each iteration).
      */
-    private void fillPopulation(){
+    private void fillPopulationByClassicTournament() {
+        while (specimensGenerationNext.size() < populationSize) {
+            Specimen parentA = getParentFromTournament();
+            Specimen parentB = getParentFromTournament();
+
+            Random r = new Random();
+
+            if (r.nextDouble() < crossoverProbability){
+                int startPoint = Math.max(r.nextInt(ttp.getDimensionsNumber()) - 1, 0);
+                int endPoint = Math.min(startPoint + r.nextInt(ttp.getDimensionsNumber() / 10), ttp.getDimensionsNumber() - 1);
+
+                specimensGenerationNext.add(createChildPMX(parentA, parentB, startPoint, endPoint));
+            } else {
+                specimensGenerationNext.add(new Specimen(parentA));
+            }
+        }
+    }
+
+    /**
+     * Method used to fill population with children up to max population size (from parents population).
+     */
+    private void fillPopulationByParentsPopulation(){
         int parents = specimensGenerationCurrent.size();
 
         while (specimensGenerationCurrent.size() < populationSize){
@@ -103,6 +140,59 @@ class GA {
                 );
             }
         }
+    }
+
+    /**
+     * Method used to choose a parent by the classical tournament.
+     */
+    private Specimen getParentFromTournament(){
+        ArrayList<Specimen> specimensToTournament = new ArrayList<>();
+
+        Random r = new Random();
+
+        /*
+        While not enough specimens to make an tournament
+         */
+        while (specimensToTournament.size() < tournamentSize){
+            Specimen parentCandidate = specimensGenerationCurrent.get(r.nextInt(populationSize));
+
+            if (canAddSpecimenToTournament(parentCandidate, specimensToTournament)){
+                specimensToTournament.add(parentCandidate);
+            }
+        }
+
+        /*
+        Make a tournament and get the best of specimens
+         */
+
+        Specimen bestSpecimen = specimensToTournament.get(0);
+
+        for (Specimen specimen : specimensToTournament){
+            if (specimen.getRating() > bestSpecimen.getRating()){
+                bestSpecimen = specimen;
+            }
+        }
+
+        /*
+        Return deep copy of a best specimen.
+         */
+        return new Specimen(bestSpecimen);
+    }
+
+
+    /**
+     * Method used to check if there is a possibility to add a specimen to a unique arrayList (if element not in yet).
+     */
+    private boolean canAddSpecimenToTournament(Specimen parentCandidate, ArrayList<Specimen> specimensToTournament) {
+        boolean canAddSpecimen = true;
+
+        for (Specimen specimen : specimensToTournament){
+            if (specimen.equals(parentCandidate)){
+                canAddSpecimen = false;
+            }
+        }
+
+        return canAddSpecimen;
     }
 
     /**
@@ -200,7 +290,7 @@ class GA {
     /**
      * Method used to create population of the parents (next generation)
      */
-    private void makeCompetition(){
+    private void createPopulationOfParents(){
         for (int i = 0 ; i < populationSize / 2; i++){
             if (specimensGenerationCurrent.get(i * 2).getRating() > specimensGenerationCurrent.get(i * 2 + 1).getRating()) {
                 specimensGenerationNext.add(specimensGenerationCurrent.get(i * 2));
@@ -227,6 +317,10 @@ class GA {
         }
     }
 
+
+    /**
+     * Put all population specimens into string.
+     */
     String populationToString(){
         StringBuilder result = new StringBuilder();
 
@@ -237,6 +331,9 @@ class GA {
         return result.toString();
     }
 
+    /**
+     * Save results into CSV file.
+     */
     void resultsToFile(){
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter("D:/GeneticAlgorithm.csv"));
@@ -270,5 +367,9 @@ class GA {
 
     public void setMutationProbability(double mutationProbability) {
         this.mutationProbability = mutationProbability;
+    }
+
+    public void setTournamentSize(int tournamentSize) {
+        this.tournamentSize = tournamentSize;
     }
 }
