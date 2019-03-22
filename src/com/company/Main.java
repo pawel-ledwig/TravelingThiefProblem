@@ -12,69 +12,36 @@ public class Main {
 
     public static void main(String[] args) {
 
-        File file = new File("files/medium_4.ttp");
+        String filename = "easy_4";
 
-        FileParser fileParser = new FileParser(file, headerLength);
-        fileParser.init();
+        examineStandard(filename);
 
-        examineAll();
-
-        // Runnable runnable_population    = () -> examinePopulationSize("easy_1");
-        // Runnable runnable_generation    = () -> examineGenerationNumber("easy_1");
-        // Runnable runnable_factor_mx     = () -> examineFactorMX("easy_1");
-        // Runnable runnable_factor_mm     = () -> examineFactorMM("easy_1");
-        // Runnable runnable_tournament    = () -> examineTournament("easy_1");
-//
-        // Thread t_population     = new Thread(runnable_population);
-        // Thread t_generation     = new Thread(runnable_generation);
-        // Thread t_factor_mx      = new Thread(runnable_factor_mx);
-        // Thread t_factor_mm      = new Thread(runnable_factor_mm);
-        // Thread t_tournament     = new Thread(runnable_tournament);
-//
-        // t_population.start();
-        // t_generation.start();
-        // t_factor_mx.start();
-        // t_factor_mm.start();
-        // t_tournament.start();
+        // examineAll();
 
         // examinePopulationSize("easy_1");
         // examineGenerationNumber("easy_1");
         // examineFactorMX("easy_1");
         // examineFactorMM("easy_1");
         // examineTournament("easy_1");
+    }
 
-        // TTP ttp = fileParser.getTtp();
-        // ttp.setKnpTypeBestRatio();
+    private static void examineStandard(String filename) {
+        File file = new File("files/" + filename + ".ttp");
 
-        //System.out.println(ttp.headersToString());
-        //System.out.println(ttp.nodesToString());
-        //System.out.println(ttp.itemsToString());
+        FileParser fileParser = new FileParser(file, headerLength);
+        fileParser.init();
 
-        // ttp.createRandomTSP();
-        //System.out.println(ttp.tspToString());
-        //System.out.println(ttp.calculateKNP());
-        //System.out.println(ttp.velocityToString());
-        //System.out.println(ttp.calculateTravelTime());
-        //System.out.println(ttp.evaluate());
+        TTP ttp = fileParser.getTtp();
+        ttp.setKnpTypeBestRatio();
+        ttp.createRandomTSP();
 
-        //GA ga = new GA(100, 100, ttp);
-        //ga.setCrossoverProbability(0.7);
-        //ga.setMutationProbability(0.3);
-        //ga.setTournamentSize(5);
-//
-        //ga.createPopulation();
-        ////System.out.println(ga.populationToString());
-        //System.out.println("Best: " + ga.getBestRating());
-        //System.out.println("Avg: " + ga.getAvgRating());
-        //System.out.println("Worst: " + ga.getWorstRating());
-        //ga.makeGenerationsByClassicTournament();
-        //System.out.println();
-        //System.out.println("Best: " + ga.getBestRating());
-        //System.out.println("Avg: " + ga.getAvgRating());
-        //System.out.println("Worst: " + ga.getWorstRating());
-        //ga.resultsToFile();
-        //System.out.println(ga.populationToString());
-        //System.out.println(ga.getWorstRating());
+        GA ga = new GA(250, 200, ttp);
+        ga.setCrossoverProbability(0.7);
+        ga.setMutationProbability(0.2);
+        ga.setTournamentSize(5);
+        ga.createPopulation();
+        ga.makeGenerationsByClassicTournament();
+        ga.resultsToFile(filename);
     }
 
     private static void examineAll() {
