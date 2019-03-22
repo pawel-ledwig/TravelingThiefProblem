@@ -334,11 +334,16 @@ class GA {
     /**
      * Save results into CSV file.
      */
-    void resultsToFile(){
+    void resultsToFile(String filename){
         try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter("D:/GeneticAlgorithm.csv"));
+            BufferedWriter bw = new BufferedWriter(new FileWriter("D:/" + filename + "_learning.csv"));
+
+            bw.write("GENERATIONS: " + generationsNumber + "POP_SIZE: " + populationSize + ", MX: " + crossoverProbability + ", MM: " + mutationProbability + ", TOUR: " + tournamentSize);
+            bw.newLine();
+
             bw.write("ID;Best;Avg;Worst");
             bw.newLine();
+
             for (int i = 0 ; i < bestRatings.size(); i++){
                 bw.write(i + ";" + Math.round(bestRatings.get(i)) + ";" + Math.round(avgRatings.get(i)) + ";" + Math.round(worstRatings.get(i)) + ";");
                 bw.newLine();
